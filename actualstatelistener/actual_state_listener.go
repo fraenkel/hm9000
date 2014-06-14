@@ -1,15 +1,16 @@
 package actualstatelistener
 
 import (
+	"strconv"
+	"sync"
+	"time"
+
 	"github.com/cloudfoundry/gunk/timeprovider"
 	"github.com/cloudfoundry/hm9000/config"
 	"github.com/cloudfoundry/hm9000/helpers/logger"
 	"github.com/cloudfoundry/hm9000/helpers/metricsaccountant"
 	"github.com/cloudfoundry/hm9000/models"
 	"github.com/cloudfoundry/hm9000/store"
-	"strconv"
-	"sync"
-	"time"
 
 	"github.com/cloudfoundry/yagnats"
 )
@@ -89,7 +90,7 @@ func (listener *ActualStateListener) Start() {
 		listener.totalReceivedHeartbeats++
 		listener.heartbeatsToSave = append(listener.heartbeatsToSave, heartbeat)
 
-		totalReceivedHeartbeats := listener.totalReceivedHeartbeats
+		// totalReceivedHeartbeats := listener.totalReceivedHeartbeats
 		numToSave := len(listener.heartbeatsToSave)
 
 		listener.heartbeatMutex.Unlock()
@@ -98,7 +99,7 @@ func (listener *ActualStateListener) Start() {
 			"Heartbeats Pending Save": strconv.Itoa(numToSave),
 		})
 
-		listener.metricsAccountant.TrackReceivedHeartbeats(totalReceivedHeartbeats)
+		// listener.metricsAccountant.TrackReceivedHeartbeats(totalReceivedHeartbeats)
 	})
 
 	go listener.syncHeartbeats()
@@ -143,10 +144,10 @@ func (listener *ActualStateListener) syncHeartbeats() {
 
 				listener.heartbeatMutex.Lock()
 				listener.totalSavedHeartbeats += len(heartbeatsToSave)
-				totalSavedHeartbeats := listener.totalSavedHeartbeats
+				// totalSavedHeartbeats := listener.totalSavedHeartbeats
 				listener.heartbeatMutex.Unlock()
 
-				listener.metricsAccountant.TrackSavedHeartbeats(totalSavedHeartbeats)
+				// listener.metricsAccountant.TrackSavedHeartbeats(totalSavedHeartbeats)
 			}
 		}
 
