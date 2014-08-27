@@ -33,6 +33,19 @@ func main() {
 			},
 		},
 		{
+			Name:        "fetch_db_desired",
+			Description: "Fetches db desired state",
+			Usage:       "hm fetch_db_desired --config=/path/to/config --poll",
+			Flags: []cli.Flag{
+				cli.StringFlag{"config", "", "Path to config file"},
+				cli.BoolFlag{"poll", "If true, poll repeatedly with an interval defined in config"},
+			},
+			Action: func(c *cli.Context) {
+				logger, _, conf := loadLoggerAndConfig(c, "fetcher")
+				hm.FetchDBDesiredState(logger, conf, c.Bool("poll"))
+			},
+		},
+		{
 			Name:        "listen",
 			Description: "Listens over the NATS for the actual state",
 			Usage:       "hm listen --config=/path/to/config",
